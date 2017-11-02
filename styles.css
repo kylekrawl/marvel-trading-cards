@@ -1,0 +1,11 @@
+#star-wars-characters {
+    color: #fff;
+    background: #000;
+    min-height: 50vh;
+}
+
+#my-characters {
+    color: #000;
+    background: darkgrey;
+    min-height: 50vh;
+}

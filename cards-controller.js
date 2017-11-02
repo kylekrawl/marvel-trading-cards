@@ -1,36 +1,68 @@
 function CardsController() {
-var marvelService = new globals.MarvelService()
+  var starWarsService = new StarWarsService()
 
-  this.add = function add(id){
-    console.log('characterId', id)
+  this.add = function add(id) {
+    starWarsService.addToMyCharacters(id)
+    updateMyCharacters(starWarsService.getMyCharacters())
+    updateStarWars(starWarsService.getStarWarsCharacters())
   }
 
-  marvelService.getCharacters(ready)
+  this.remove = function remove(id) {
+    starWarsService.removeMyCharacter(id)
+    updateMyCharacters(starWarsService.getMyCharacters())
+    updateStarWars(starWarsService.getStarWarsCharacters())
+  }
 
+  starWarsService.getCharacters(ready)
+
+ 
   function ready(data) {
 
-    updateMarvel(data)
+    updateStarWars(data)
 
-    function updateMarvel(list) {
-      var elem = document.getElementById('marvel-characters')
-      elem.innerHTML = ''
-      var marvelTemplate = ''
-      for (var i in list) {
-        var character = list[i];
-        character.thumbnail.path = character.thumbnail.path.replace('http:', '')
-        marvelTemplate += `
-      <div class="card">
-        <img src="${character.thumbnail.path}.${character.thumbnail.extension}" width="100">
+  }
+
+  function updateStarWars(list) {
+    var elem = document.getElementById('star-wars-characters')
+    elem.innerHTML = ''
+    var starWarsTemplate = ''
+    for (var i in list) {
+      var character = list[i];
+      character.charId = `${character.height}${character.mass}`
+      console.log(character)
+      starWarsTemplate += `
+      <div class="col-sm-3 text-center">
+        <img src="https://robohash.org/${character.name}?set=set4" width="100">
         <h3>${character.name}</h3>
-        <div>
-          <button class="btn-success" id="${character.id}" onclick="app.controllers.marvelController.add('${character.id}')">Add to Team</button>
-        </div>
-      <div>
+          <div>
+            <button class="btn-success" id="${character.charId}" onclick="app.controllers.cardsController.add('${character.charId}')">Add to Team</button>
+          </div>
+      </div>
       `
-
-        elem.innerHTML = marvelTemplate
-      }
-
+      elem.innerHTML = starWarsTemplate
     }
+
+  }
+
+  function updateMyCharacters(list) {
+    var elem = document.getElementById('my-characters')
+    elem.innerHTML = ''
+    var starWarsTemplate = ''
+    for (var i in list) {
+      var character = list[i];
+      console.log(character)
+      starWarsTemplate += `
+      <div class="col-sm-3 text-center">
+        <img src="https://robohash.org/${character.name}?set=set4" width="100">
+        <h3>${character.name}</h3>
+          <div>
+            <button class="btn-danger" id="${character.charId}" onclick="app.controllers.cardsController.remove('${character.charId}')">Remove from Team</button>
+          </div>
+      </div>
+      `
+      elem.innerHTML = starWarsTemplate
+    }
+
+  }
 
 }
